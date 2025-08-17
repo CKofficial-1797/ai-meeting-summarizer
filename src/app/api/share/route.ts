@@ -28,8 +28,13 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error("Send mail error:", err);
+  } catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error("Send mail error:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
+  console.error("Send mail unknown error:", err);
+  return NextResponse.json({ error: "Unknown error" }, { status: 500 });
+}
+
 }

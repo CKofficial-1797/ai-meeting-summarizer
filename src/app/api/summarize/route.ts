@@ -19,8 +19,13 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ summary: text });
-  } catch (err: any) {
-    console.error("Summarize API error:", err);
+  } catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error("Groq API error:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
+  console.error("Groq API unknown error:", err);
+  return NextResponse.json({ error: "Unknown error" }, { status: 500 });
+}
+
 }
